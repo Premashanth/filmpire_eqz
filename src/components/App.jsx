@@ -24,7 +24,7 @@ const App = () => {
           <Route exact path="/">
             <Movies></Movies>
           </Route>
-          <Route exact path="/movies">
+          <Route exact path="/profile/:id">
             <Profile></Profile>
           </Route>
         </Switch>
