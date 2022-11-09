@@ -41,7 +41,44 @@ export const tmdbApi = createApi({
         return `movie/popular?=${page}&api_key=${tmdbAPIKey}`;
       },
     }),
+
+    // Get Movie
+    getMovie: builder.query({
+      query: (id) =>
+        `/movie/${id}?append_to_response=videos,credits&api_key=${tmdbAPIKey}`,
+    }),
+
+    // Get Recommendations
+    getRecommendations: builder.query({
+      query: ({ movie_id, list }) =>
+        `/movie/${movie_id}/${list}?api_key=${tmdbAPIKey}`,
+    }),
+
+    // Get Actor
+    getActor: builder.query({
+      query: (id) => `person/${id}?api_key=${tmdbAPIKey}`,
+    }),
+
+    // Get Movies by Actor
+    getMoviesByActorId: builder.query({
+      query: ({ id, page }) =>
+        `/discover/movie?with_cast=${id}&page=${page}&api_key=${tmdbAPIKey}`,
+    }),
+
+    // Get User Specific Lists
+    getList: builder.query({
+      query: ({ listName, accountId, sessionId, page }) =>
+        `/account/${accountId}/${listName}?api_key=${tmdbAPIKey}&session_id=${sessionId}&page=${page}`,
+    }),
   }),
 });
 
-export const { useGetGenresQuery, useGetMoviesQuery } = tmdbApi;
+export const {
+  useGetGenresQuery,
+  useGetMoviesQuery,
+  useGetMovieQuery,
+  useGetRecommendationsQuery,
+  useGetActorQuery,
+  useGetMoviesByActorIdQuery,
+  useGetListQuery,
+} = tmdbApi;
