@@ -21,7 +21,7 @@ import {
   ArrowBack,
 } from "@mui/icons-material";
 import { Link, useParams } from "react-router-dom";
-import { useDispatch, useSelector, useState } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useGetMovieQuery } from "../../services/TMDB";
 import useStyles from "./styles";
@@ -32,6 +32,7 @@ import {
 } from "../../services/TMDB";
 import { selectGenreOrCategory } from "../../features/currentGenreOrCategory";
 import genreIcons from "../../assets/genres";
+import { useState } from "react";
 
 const MovieInformation = () => {
   const { id } = useParams();
@@ -58,6 +59,8 @@ const MovieInformation = () => {
   });
   const isMovieFavorited = true;
   const isMovieWatchlisted = true;
+
+  const [open, setOpen] = useState(false);
 
   const addToFavorites = () => {};
   const addToWatchList = () => {};
@@ -190,7 +193,13 @@ const MovieInformation = () => {
                 >
                   IMDB
                 </Button>
-                <Button onClick={() => {}} href="#" endIcon={<Theaters />}>
+                <Button
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                  href="#"
+                  endIcon={<Theaters />}
+                >
                   Trailer
                 </Button>
               </ButtonGroup>
@@ -230,6 +239,33 @@ const MovieInformation = () => {
           </div>
         </Grid>
       </Grid>
+      <Box marginTop="5rem" width="100%">
+        <Typography variant="h3" gutterBottom align="center">
+          You might also like
+        </Typography>
+        {recommendations ? (
+          <MovieList movies={recommendations} numberOfMovies={12} />
+        ) : (
+          <Box>Sorry, nothing was found.</Box>
+        )}
+      </Box>
+      <Modal
+        closeAfterTransition
+        className={classes.modal}
+        open={open}
+        onClose={() => setOpen(false)}
+      >
+        {data.videos.results.length > 0 && (
+          <iframe
+            autoPlay
+            className={classes.video}
+            frameBorder="0"
+            title="Trailer"
+            src={`https://www.youtube.com/embed/${data.videos.results[0].key}`}
+            allow="autoplay"
+          />
+        )}
+      </Modal>
     </Grid>
   );
 };
